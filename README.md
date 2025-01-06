@@ -5,7 +5,7 @@ Projeto Web Full-Stack para adquirir/aprimorar habilidades em Desenvolvimento We
 _(Em breve)_
 
 ## Sobre o projeto
-_(Em breve)_
+Será uma rede social, parecida com o Instagram/Twitter, onde usuários cadastrados conseguem publicar textos e mídias e usuários que o seguem conseguem visualizá-los.
 
 ## Colaboradores 👨‍👩‍👧‍👦
 - [Leonardo Vasconcelos](https://github.com/leonardofv)
