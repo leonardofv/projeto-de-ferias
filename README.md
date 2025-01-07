@@ -6,6 +6,16 @@ Projeto Web Full-Stack para adquirir/aprimorar habilidades em Desenvolvimento We
 
 Será uma rede social, parecida com o Instagram/Twitter, onde usuários cadastrados conseguem publicar textos e mídias e usuários que o seguem conseguem visualizá-los.
 
+## Rodando
+
+Para executar o client e servidor em ambiente de desenvolvimento:
+
+```bash
+npm run dev
+```
+
+O servidor rodará na porta 3000 enquanto Expo rodará em sua porta padrão (8081).
+
 ## Tech Stack 💻
 
 ### Front-end
