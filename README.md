@@ -16,8 +16,8 @@ Será uma rede social, parecida com o Instagram/Twitter, onde usuários cadastra
 ### Back-end
 - [Bun.js](https://bun.sh/) (JavaScript Runtime, like Node.js but better)
 - [Express.js](https://expressjs.com/)
-- _A DEFINIR_ (Banco de Dados SQL)
-- _A DEFINIR_ (ORM ou Query Builder)
+- [PostgreSQL](https://www.postgresql.org/) (Banco de Dados SQL)
+- [Knex.js](https://knexjs.org/) (Query Builder)
 
 ## Colaboradores 👨‍👩‍👧‍👦
 - [Leonardo Vasconcelos](https://github.com/leonardofv)
