@@ -16,6 +16,8 @@ npm run dev
 
 O servidor rodará na porta 3000 enquanto Expo rodará em sua porta padrão (8081).
 
+> Se quiser rodar no seu dispositivo móvel também, recomendo rodar `npx expo start` direto no diretório do cliente, já que ele apresentará o QR Code para que consiga acessá-lo. Rodando com esse comando ele irá disponibilizar somente na Web.
+
 ## Tech Stack 💻
 
 ### Front-end
