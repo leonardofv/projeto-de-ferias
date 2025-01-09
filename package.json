@@ -1,0 +1,25 @@
+{
+  "name": "projeto-de-ferias",
+  "version": "1.0.0",
+  "description": "Projeto Web Full-Stack para adquirir/aprimorar habilidades em Desenvolvimento Web, utilizando tecnologias como JavaScript, React, entre outros.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:*\"",
+    "dev:client": "cd client && npm start",
+    "dev:server": "cd server && npm run dev",
+    "format": "prettier --write .",
+    "lint": "eslint ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "concurrently": "^9.1.2",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react": "^7.37.3",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2",
+    "typescript-eslint": "^8.19.1"
+  }
+}
