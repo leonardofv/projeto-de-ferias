@@ -6,7 +6,7 @@ export async function up(knex: Knex): Promise<void> {
         table.increments();
         table.integer('user_id').references('id').inTable('users').onDelete('CASCADE');
         table.string('path').notNullable();
-        table.date('publish_date').notNullable();
+        table.dateTime('publish_date').defaultTo(knex.fn.now());
         table.string('description');
     })
 }
