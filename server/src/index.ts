@@ -3,6 +3,7 @@ import db from './database';
 
 const app = express();
 app.use(express.json());
+
 const PORT = process.env.PORT ?? 3000;
 
 app.get('/', (_, res) => {
@@ -26,13 +27,15 @@ app.post('/auth/register', async (req, res) => {
     await db.insert({ user_id: user.id }).into('user_profile');
 
     res.status(201).json({ message: 'User registered! ✅', data: user });
-  } catch (err) {
-    const isUniqueConstraint = (err as any).constraint.includes('unique');
+  } catch (err: any) {
+    const isUniqueConstraint = !!err.constraint?.includes('unique');
+
     if (isUniqueConstraint) {
       res.status(400).json({ message: 'Username/email already exists 😢❌' });
       return;
     }
 
+    console.error(err);
     res.status(500).json({ message: 'Something went wrong 😢❌' });
   }
 });
