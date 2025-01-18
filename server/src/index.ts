@@ -11,6 +11,7 @@ app.get('/', (_, res) => {
 });
 
 app.post('/auth/register', async (req, res) => {
+
   const { email, password, password2, username } = req.body;
 
   if (password !== password2) {
@@ -39,6 +40,63 @@ app.post('/auth/register', async (req, res) => {
     res.status(500).json({ message: 'Something went wrong 😢❌' });
   }
 });
+
+
+
+app.post('/auth/login', async (req, res) => {
+
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    res.status(400).json({message: 'email and password are required'});
+  }
+
+  try {
+    const [user] = await db('users').where({email});
+
+    if(user.password != password) {
+      res.status(400).json({message: 'Invalid email or password'});
+    }
+
+    res.status(201).json({message: 'Login Successful✅', data: user})
+
+  }catch(err) {
+
+    console.error(err);
+    res.status(500).json({ message: 'Something went wrong 😢❌' });
+  }
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.listen(PORT, () =>
   console.log(`🚀 Server running on http://localhost:${PORT}`),
