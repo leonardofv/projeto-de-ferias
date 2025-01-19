@@ -72,7 +72,7 @@ app.post('/auth/login', async (req, res) => {
 
 //post
 app.post('/post', async (req, res) => {
-  const { user_id, path, publish_date, description } = req.body;
+  const { user_id, path, description } = req.body;
 
   if(!user_id || !path) {
     res.status(401).json({message: 'user_id and path are required'});
@@ -80,7 +80,7 @@ app.post('/post', async (req, res) => {
   }
     try{
       const [post] = await db
-      .insert({user_id, path, publish_date: publish_date ?? new Date(), description})
+      .insert({user_id, path, description})
       .into('post')
       .returning(['user_id', 'path', 'publish_date', 'description']);
 
