@@ -10,6 +10,7 @@ app.get('/', (_, res) => {
   res.status(200).json({ message: 'Hello, World 🗺️!' });
 });
 
+//register
 app.post('/auth/register', async (req, res) => {
 
   const { email, password, password2, username } = req.body;
@@ -41,6 +42,7 @@ app.post('/auth/register', async (req, res) => {
   }
 });
 
+//login
 app.post('/auth/login', async (req, res) => {
 
   const { email, password } = req.body;
@@ -61,12 +63,34 @@ app.post('/auth/login', async (req, res) => {
     res.status(201).json({message: 'Login Successful✅', data: user})
 
   }catch(err) {
-
     console.error(err);
     res.status(500).json({ message: 'Something went wrong 😢❌' });
   }
 
 })
+
+
+//post
+app.post('/post', async (req, res) => {
+  const { user_id, path, description } = req.body;
+
+  if(!user_id || !path) {
+    res.status(401).json({message: 'user_id and path are required'});
+    return;
+  }
+    try{
+      const [post] = await db
+      .insert({user_id, path, description})
+      .into('post')
+      .returning(['user_id', 'path', 'publish_date', 'description']);
+
+      res.status(201).json({message: 'post created successful✅', data: post});
+
+    }catch(err){
+      console.error(err);
+      res.status(500).json({ message: 'Something went wrong 😢❌' });
+    }
+  })
 
 
 app.listen(PORT, () =>
