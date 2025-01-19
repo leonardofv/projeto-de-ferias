@@ -92,6 +92,28 @@ app.post('/post', async (req, res) => {
     }
   })
 
+  //all posts
+  app.get('/user_posts/:user_id', async (req, res) => {
+
+    const { user_id } = req.params;
+
+    try{
+      const user = await db('users').where({ id: user_id }).first();
+
+      if(!user) {
+        res.status(401).json({message: 'user not found😢'});
+      }
+
+      const posts = await db.select('*').from('post').where({user_id});
+  
+      res.status(201).json({message: 'Posts retrivied successful✅', data: posts});
+    } catch(err){
+      console.log(err);
+      res.status(500).json({message: 'Something went wrong 😢❌'});
+    }
+
+  })
+
 
 app.listen(PORT, () =>
   console.log(`🚀 Server running on http://localhost:${PORT}`),
