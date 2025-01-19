@@ -41,14 +41,13 @@ app.post('/auth/register', async (req, res) => {
   }
 });
 
-
-
 app.post('/auth/login', async (req, res) => {
 
   const { email, password } = req.body;
 
   if (!email || !password) {
     res.status(400).json({message: 'email and password are required'});
+    return;
   }
 
   try {
@@ -56,6 +55,7 @@ app.post('/auth/login', async (req, res) => {
 
     if(user.password != password) {
       res.status(400).json({message: 'Invalid email or password'});
+      return;
     }
 
     res.status(201).json({message: 'Login Successful✅', data: user})
@@ -67,35 +67,6 @@ app.post('/auth/login', async (req, res) => {
   }
 
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 app.listen(PORT, () =>
