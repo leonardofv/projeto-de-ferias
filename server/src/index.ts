@@ -93,18 +93,13 @@ app.post('/post', async (req, res) => {
   })
 
   //all posts
-  app.get('/user_posts/:user_id', async (req, res) => {
-
-    const { user_id } = req.params;
+  app.get('/posts', async (req, res) => {
 
     try{
-      const user = await db('users').where({ id: user_id }).first();
-
-      if(!user) {
-        res.status(401).json({message: 'user not found😢'});
-      }
-
-      const posts = await db.select('*').from('post').where({user_id});
+      // if(!user) {
+      //   res.status(404).json({message: 'user not found😢'});
+      // }
+      const posts = await db.select('*').from('post');
   
       res.status(201).json({message: 'Posts retrivied successful✅', data: posts});
     } catch(err){
