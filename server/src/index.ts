@@ -92,6 +92,23 @@ app.post('/post', async (req, res) => {
     }
   })
 
+  //all posts
+  app.get('/posts', async (req, res) => {
+
+    try{
+      // if(!user) {
+      //   res.status(404).json({message: 'user not found😢'});
+      // }
+      const posts = await db.select('*').from('post');
+  
+      res.status(201).json({message: 'Posts retrivied successful✅', data: posts});
+    } catch(err){
+      console.log(err);
+      res.status(500).json({message: 'Something went wrong 😢❌'});
+    }
+
+  })
+
 
 app.listen(PORT, () =>
   console.log(`🚀 Server running on http://localhost:${PORT}`),
