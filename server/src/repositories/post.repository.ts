@@ -37,3 +37,14 @@ export const getAll = async (): Promise<Post[]> => {
     .select()
     .from('post');
 };
+
+export const getByUserId = async (userId: User['id']): Promise<Post[]> => {
+  return db
+    .column('id', 'path', 'description', {
+      publishDate: 'publish_date',
+      userId: 'user_id',
+    })
+    .select()
+    .from('post')
+    .where({ user_id: userId });
+};
