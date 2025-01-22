@@ -1,10 +1,13 @@
 import { Router } from 'express';
 import * as userRepository from '../repositories/user.repository';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 const JWT_SECRET = process.env.JWT_SECRET ?? '';
 
 const router = Router();
+
+const SALT_ROUNDS = 10;
 
 // Register User
 router.post('/register', async (req, res) => {
@@ -15,8 +18,14 @@ router.post('/register', async (req, res) => {
     return;
   }
 
+  const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
   try {
-    const user = await userRepository.create({ email, password, username });
+    const user = await userRepository.create({
+      email,
+      password: hashedPassword,
+      username,
+    });
 
     const token = jwt.sign({ id: user.id }, JWT_SECRET);
 
@@ -52,7 +61,14 @@ router.post('/login', async (req, res) => {
   try {
     const user = await userRepository.findByEmailOrUsername(emailOrUsername);
 
-    if (!user || user.password !== password) {
+    if (!user) {
+      res.status(400).json({ message: 'Invalid email or password' });
+      return;
+    }
+
+    const isCorrectPassword = await bcrypt.compare(password, user.password);
+
+    if (!isCorrectPassword) {
       res.status(400).json({ message: 'Invalid email or password' });
       return;
     }
