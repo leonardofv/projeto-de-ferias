@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import db from '../database';
+import * as postRepository from '../repositories/post.repository';
 
 const router = Router();
 
@@ -12,12 +12,15 @@ router.post('/', async (req, res) => {
     return;
   }
   try {
-    const [post] = await db
-      .insert({ user_id, path, description })
-      .into('post')
-      .returning(['user_id', 'path', 'publish_date', 'description']);
+    const post = await postRepository.create({
+      path,
+      description,
+      userId: user_id,
+    });
 
-    res.status(201).json({ message: 'post created successful✅', data: post });
+    res
+      .status(201)
+      .json({ message: 'Post created successfully ✅', data: post });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Something went wrong 😢❌' });
@@ -30,11 +33,8 @@ router.get('/', async (_, res) => {
     // if(!user) {
     //   res.status(404).json({message: 'user not found😢'});
     // }
-    const posts = await db.select('*').from('post');
-
-    res
-      .status(201)
-      .json({ message: 'Posts retrivied successful✅', data: posts });
+    const posts = await postRepository.getAll();
+    res.status(201).json(posts);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: 'Something went wrong 😢❌' });

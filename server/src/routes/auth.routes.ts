@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import db from '../database';
+import * as userRepository from '../repositories/user.repository';
 
 const router = Router();
 
@@ -13,14 +13,12 @@ router.post('/register', async (req, res) => {
   }
 
   try {
-    const [user] = await db
-      .insert({ email, password, username })
-      .into('users')
-      .returning(['id', 'email', 'username']);
+    const user = await userRepository.create({ email, password, username });
 
-    await db.insert({ user_id: user.id }).into('user_profile');
-
-    res.status(201).json({ message: 'User registered! ✅', data: user });
+    res.status(201).json({
+      message: 'User registered! ✅',
+      data: { ...user, password: undefined },
+    });
   } catch (err: any) {
     const isUniqueConstraint = !!err.constraint?.includes('unique');
 
@@ -44,14 +42,17 @@ router.post('/login', async (req, res) => {
   }
 
   try {
-    const [user] = await db('users').where({ email });
+    const user = await userRepository.findByEmailOrUsername(email);
 
-    if (user.password != password) {
+    if (user.password !== password) {
       res.status(400).json({ message: 'Invalid email or password' });
       return;
     }
 
-    res.status(201).json({ message: 'Login Successful✅', data: user });
+    res.status(201).json({
+      message: 'Login Successful✅',
+      data: { ...user, password: undefined },
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Something went wrong 😢❌' });
