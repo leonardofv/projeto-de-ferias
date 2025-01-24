@@ -24,7 +24,7 @@ export const create = async ({
 
 export const findByEmailOrUsername = async (
   emailOrUsername: string,
-): Promise<User> => {
+): Promise<User | null> => {
   const user = await db('users')
     .where({ email: emailOrUsername })
     .orWhere({ username: emailOrUsername })
