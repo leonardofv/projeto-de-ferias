@@ -9,6 +9,8 @@ const router = Router();
 
 const SALT_ROUNDS = 10;
 
+type DatabaseError = { constraint: string };
+
 // Register User
 router.post('/register', async (req, res) => {
   const { email, password, password2, username } = req.body;
@@ -34,8 +36,10 @@ router.post('/register', async (req, res) => {
       data: { ...user, password: undefined },
       token,
     });
-  } catch (err: any) {
-    const isUniqueConstraint = !!err.constraint?.includes('unique');
+  } catch (err) {
+    const isUniqueConstraint = !!(err as DatabaseError).constraint.includes(
+      'unique',
+    );
 
     if (isUniqueConstraint) {
       res.status(400).json({ message: 'Username/email already exists 😢❌' });
