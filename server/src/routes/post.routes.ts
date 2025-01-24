@@ -8,17 +8,28 @@ const router = Router();
 
 // Create a new Post
 router.post('/', async (req, res) => {
-  const { user_id, path, description } = req.body;
+  const { path, description } = req.body;
 
-  if (!user_id || !path) {
-    res.status(401).json({ message: 'user_id and path are required' });
+  if (!path) {
+    res.status(401).json({ message: 'path are required' });
     return;
   }
+
+  const authHeader = req.headers.authorization ?? '';
+    const token = authHeader.split(' ')[1];
+
+    if (!token) {
+      res.status(401).send();
+      return;
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET) as {id: number};
+
   try {
     const post = await postRepository.create({
       path,
       description,
-      userId: user_id,
+      userId: decoded.id,
     });
 
     res
@@ -44,7 +55,7 @@ router.get('/', async (req, res) => {
       return;
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    const decoded = jwt.verify(token, JWT_SECRET) as {id: number};
 
     const posts = await postRepository.getByUserId(decoded.id);
     res.status(201).json(posts);
