@@ -1,3 +1,4 @@
+import { getToken } from '@/utils';
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
@@ -10,6 +11,7 @@ export default function HomeScreen() {
   const counterRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
+    getToken().then((token) => console.log({ token }));
     counterRef.current = setInterval(() => {
       setCounter((c) => c + 1);
     }, 1000);
