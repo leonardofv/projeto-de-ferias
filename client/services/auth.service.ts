@@ -1,6 +1,6 @@
-const API_URL = process.env.API_URL;
+const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
-if (!API_URL) throw new Error('API_URL does not exists');
+if (!API_URL) throw new Error('EXPO_PUBLIC_API_URL does not exists');
 
 type LoginUserPayload = {
   message: string;

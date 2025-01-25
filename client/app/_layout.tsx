@@ -21,6 +21,8 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    Lato: require('../assets/fonts/Lato-Regular.ttf'),
+    LatoBold: require('../assets/fonts/Lato-Bold.ttf'),
   });
   const navigation = useNavigation<any>(); // eslint-disable-line
 

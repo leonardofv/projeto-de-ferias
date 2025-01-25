@@ -31,7 +31,6 @@ export default function RegisterScreen() {
     await storeToken(token);
 
     navigation.navigate('(tabs)');
-    alert('Successfully Logged In ✅');
   };
 
   return (
