@@ -1,3 +1,4 @@
+import { AuthService } from '@/services/auth.service';
 import { storeToken } from '@/utils';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
@@ -10,28 +11,8 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
 
   const loginUser = async () => {
-    const res = await fetch('http://localhost:3000/auth/login', {
-      body: JSON.stringify({
-        emailOrUsername,
-        password,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-    });
-
-    const data = await res.json();
-
-    if (res.status === 400) {
-      alert(data.message);
-      return;
-    }
-
-    if (res.status === 500) {
-      alert('Something went wrong!');
-      return;
-    }
+    const data = await AuthService.login(emailOrUsername, password);
+    if (!data) return;
 
     const { token } = data;
     await storeToken(token);

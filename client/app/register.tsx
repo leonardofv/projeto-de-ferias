@@ -1,3 +1,4 @@
+import { AuthService } from '@/services/auth.service';
 import { storeToken } from '@/utils';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
@@ -17,30 +18,14 @@ export default function RegisterScreen() {
       return;
     }
 
-    const res = await fetch('http://localhost:3000/auth/register', {
-      body: JSON.stringify({
-        email,
-        password,
-        password2,
-        username,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
+    const data = await AuthService.register({
+      email,
+      password,
+      password2,
+      username,
     });
 
-    const data = await res.json();
-
-    if (res.status === 400) {
-      alert(data.message);
-      return;
-    }
-
-    if (res.status === 500) {
-      alert('Something went wrong!');
-      return;
-    }
+    if (!data) return;
 
     const { token } = data;
     await storeToken(token);
