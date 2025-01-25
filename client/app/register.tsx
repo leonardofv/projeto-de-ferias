@@ -45,7 +45,7 @@ export default function RegisterScreen() {
     const { token } = data;
     await storeToken(token);
 
-    navigation.navigate('index');
+    navigation.navigate('(tabs)');
     alert('Successfully Logged In ✅');
   };
 
@@ -89,6 +89,16 @@ export default function RegisterScreen() {
           />
         </View>
         <Button title="Registrar" onPress={registerUser}></Button>
+        <Text>
+          Já tem conta?{' '}
+          <Text
+            onPress={() => {
+              navigation.navigate('login');
+            }}
+          >
+            Login
+          </Text>
+        </Text>
       </View>
     </View>
   );

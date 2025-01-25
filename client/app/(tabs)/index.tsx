@@ -1,12 +1,14 @@
-import { getToken } from '@/utils';
+import { clearToken, getToken } from '@/utils';
+import { useNavigation } from '@react-navigation/native';
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Button } from 'react-native';
 
 const names = ['World', 'Cleberson', 'Leonardo'];
 
 export default function HomeScreen() {
   const [counter, setCounter] = useState(0);
   const currentName = names[counter % names.length];
+  const navigation = useNavigation<any>(); // eslint-disable-line
 
   const counterRef = useRef<NodeJS.Timeout>();
 
@@ -22,6 +24,13 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Hello, {currentName}! 🗺️</Text>
+      <Button
+        title="Logout"
+        onPress={() => {
+          clearToken();
+          navigation.replace('login');
+        }}
+      />
     </View>
   );
 }
