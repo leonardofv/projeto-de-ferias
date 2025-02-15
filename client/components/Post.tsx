@@ -1,5 +1,8 @@
-import { Post as IPost } from '@/services/post.service';
 import { View, Text, StyleSheet, Image, Button } from 'react-native';
+import { formatDistanceToNow } from 'date-fns';
+import { ptBR } from 'date-fns/locale/pt-BR';
+
+import { Post as IPost } from '@/services/post.service';
 
 const UPLOADS_URL = process.env.EXPO_PUBLIC_UPLOADS_URL;
 
@@ -21,14 +24,18 @@ export default function Post({
 }: UserProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>ID: {id}</Text>
+      <Text style={styles.publishDate}>
+        {formatDistanceToNow(publishDate, {
+          locale: ptBR,
+          addSuffix: true,
+        })}{' '}
+      </Text>
       <Image
         source={{ uri: `${UPLOADS_URL}/${path.replace('\\', '/')}` }}
         style={styles.image}
       />
-      <Text>Publish Date: {publishDate}</Text>
-      <Text>Description: {description}</Text>
-      <Button title="Remove" onPress={() => onRemove?.(id)} />
+      <Text>{description}</Text>
+      <Button title="Remove" onPress={() => onRemove?.(id)} color="red" />
     </View>
   );
 }
@@ -36,16 +43,17 @@ export default function Post({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    padding: 10,
     marginVertical: 5,
     borderRadius: 5,
-    width: 400,
   },
   title: {
     fontWeight: 'bold',
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 400,
+    height: 400,
+  },
+  publishDate: {
+    textAlign: 'right',
   },
 });
