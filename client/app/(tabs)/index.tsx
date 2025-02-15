@@ -1,11 +1,12 @@
-import { Post, PostService } from '@/services/post.service';
+import Post from '@/components/Post';
+import { Post as IPost, PostService } from '@/services/post.service';
 import { clearToken, getToken } from '@/utils';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, Text, Button, FlatList } from 'react-native';
 
 export default function HomeScreen() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<IPost[]>([]);
   const [isLoadingPosts, setIsLoadingPosts] = useState(true);
   const navigation = useNavigation<any>(); // eslint-disable-line
 
@@ -35,13 +36,13 @@ export default function HomeScreen() {
             <Text style={styles.noFoundPostsTitle}>No posts found.</Text>
           }
           renderItem={({ item }) => (
-            <View style={styles.post}>
-              <Text style={styles.postTitle}>ID: {item.id}</Text>
-              <Text>User ID: {item.userId}</Text>
-              <Text>Path: {item.path}</Text>
-              <Text>Publish Date: {item.publishDate}</Text>
-              <Text>Description: {item.description}</Text>
-            </View>
+            <Post
+              id={item.id}
+              userId={item.userId}
+              path={item.path}
+              publishDate={item.publishDate}
+              description={item.description}
+            />
           )}
         />
       )}
