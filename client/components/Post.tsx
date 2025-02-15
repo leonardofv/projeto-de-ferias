@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet, Image, Button } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
+import Icon from '@expo/vector-icons/Feather';
 
 import { Post as IPost } from '@/services/post.service';
 
@@ -24,18 +25,22 @@ export default function Post({
 }: UserProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.publishDate}>
-        {formatDistanceToNow(publishDate, {
-          locale: ptBR,
-          addSuffix: true,
-        })}{' '}
-      </Text>
+      <View style={styles.header}>
+        <Text style={styles.publishDate}>
+          {formatDistanceToNow(publishDate, {
+            locale: ptBR,
+            addSuffix: true,
+          })}
+        </Text>
+        <Pressable onPress={() => onRemove?.(id)}>
+          <Icon name="trash-2" color="red" size={24} />
+        </Pressable>
+      </View>
       <Image
         source={{ uri: `${UPLOADS_URL}/${path.replace('\\', '/')}` }}
         style={styles.image}
       />
       <Text>{description}</Text>
-      <Button title="Remove" onPress={() => onRemove?.(id)} color="red" />
     </View>
   );
 }
@@ -55,5 +60,12 @@ const styles = StyleSheet.create({
   },
   publishDate: {
     textAlign: 'right',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
   },
 });

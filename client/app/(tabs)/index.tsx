@@ -60,14 +60,16 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.myPostsText}>My Posts</Text>
-      <View style={styles.actions}>
-        <Pressable style={styles.actionButton} onPress={createPost}>
-          <Icon name="plus" color="#fff" size={24} />
-        </Pressable>
-        <Pressable style={styles.actionButton} onPress={logout}>
-          <Icon name="log-out" color="#fff" size={24} />
-        </Pressable>
+      <View style={styles.header}>
+        <Text style={styles.myPostsText}>My Posts</Text>
+        <View style={styles.actions}>
+          <Pressable style={styles.actionButton} onPress={createPost}>
+            <Icon name="plus" color="#fff" size={24} />
+          </Pressable>
+          <Pressable style={styles.actionButton} onPress={logout}>
+            <Icon name="log-out" color="#fff" size={24} />
+          </Pressable>
+        </View>
       </View>
       {isLoadingPosts ? (
         <Text style={styles.noFoundPostsTitle}>Loading...</Text>
@@ -120,8 +122,8 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    paddingTop: 48,
+    paddingHorizontal: 20,
+    marginTop: 16,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -130,13 +132,16 @@ const styles = StyleSheet.create({
   noFoundPostsTitle: {
     color: 'white',
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 8,
+  },
   actions: {
     flexDirection: 'row',
-    width: '100%',
     gap: 8,
-    position: 'fixed',
-    top: 20,
-    right: 16,
   },
   myPostsText: {
     color: 'white',
