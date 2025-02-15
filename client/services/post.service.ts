@@ -50,4 +50,13 @@ export class PostService {
 
     return post;
   }
+
+  static async remove(token: string, id: Post['id']) {
+    await fetch(`${URL}/posts/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
 }

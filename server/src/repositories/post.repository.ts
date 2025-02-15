@@ -49,3 +49,21 @@ export const getByUserId = async (userId: User['id']): Promise<Post[]> => {
     .where({ user_id: userId })
     .orderBy('publish_date', 'desc');
 };
+
+export const getById = async (id: Post['id']): Promise<Post | null> => {
+  const post = await db
+    .column('id', 'path', 'description', {
+      publishDate: 'publish_date',
+      userId: 'user_id',
+    })
+    .select()
+    .from('post')
+    .where({ id })
+    .first();
+
+  return post ?? null;
+};
+
+export const remove = async (id: Post['id']) => {
+  await db('post').where({ id }).del();
+};

@@ -1,4 +1,5 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { Post as IPost } from '@/services/post.service';
+import { View, Text, StyleSheet, Image, Button } from 'react-native';
 
 const UPLOADS_URL = process.env.EXPO_PUBLIC_UPLOADS_URL;
 
@@ -8,6 +9,7 @@ type UserProps = {
   path: string;
   publishDate: string;
   description?: string;
+  onRemove?: (id: IPost['id']) => void;
 };
 
 export default function Post({
@@ -15,6 +17,7 @@ export default function Post({
   path,
   publishDate,
   description,
+  onRemove,
 }: UserProps) {
   return (
     <View style={styles.container}>
@@ -25,6 +28,7 @@ export default function Post({
       />
       <Text>Publish Date: {publishDate}</Text>
       <Text>Description: {description}</Text>
+      <Button title="Remove" onPress={() => onRemove?.(id)} />
     </View>
   );
 }

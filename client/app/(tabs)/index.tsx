@@ -51,6 +51,12 @@ export default function HomeScreen() {
               path={item.path}
               publishDate={item.publishDate}
               description={item.description}
+              onRemove={async () => {
+                await PostService.remove(tokenRef.current, item.id);
+                setPosts((oldPosts) =>
+                  oldPosts.filter((p) => p.id !== item.id),
+                );
+              }}
             />
           )}
         />

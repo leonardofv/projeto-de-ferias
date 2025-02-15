@@ -2,7 +2,7 @@ import { Router } from 'express';
 import * as postRepository from '../repositories/post.repository';
 import jwt from 'jsonwebtoken';
 import { v4 as uuid } from 'uuid';
-import { writeFile } from 'fs/promises';
+import { writeFile, unlink } from 'fs/promises';
 import { resolve, join } from 'path';
 
 const JWT_SECRET = process.env.JWT_SECRET ?? '';
@@ -69,6 +69,41 @@ router.get('/', async (req, res) => {
 
     const posts = await postRepository.getByUserId(decoded.id);
     res.status(201).json(posts);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: 'Something went wrong 😢❌' });
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  if (Number.isNaN(id)) {
+    res.status(400).send();
+    return;
+  }
+
+  const authHeader = req.headers.authorization ?? '';
+  const token = authHeader.split(' ')[1];
+
+  if (!token) {
+    res.status(401).send();
+    return;
+  }
+
+  const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
+
+  try {
+    const post = await postRepository.getById(+id);
+    if (!post || post.userId !== decoded.id) {
+      res.status(404).send();
+      return;
+    }
+
+    await unlink(resolve(post.path));
+    await postRepository.remove(+id);
+
+    res.status(200).json({ message: 'Post deleted successfully 🛢️✅' });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: 'Something went wrong 😢❌' });
