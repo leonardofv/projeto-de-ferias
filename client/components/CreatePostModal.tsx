@@ -5,7 +5,10 @@ import {
   StyleSheet,
   TextInput,
   Pressable,
-  Text,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
 } from 'react-native';
 import Icon from '@expo/vector-icons/Feather';
 
@@ -23,35 +26,37 @@ export default function CreatePostModal({
   const [description, setDescription] = useState('');
 
   return (
-    <View style={styles.container}>
-      {image && <Image source={{ uri: image }} style={styles.image} />}
-      <Pressable style={styles.closeButton} onPress={onClose}>
-        <Icon name="x" color="#fff" size={24} />
-      </Pressable>
-      <View style={styles.actions}>
-        <TextInput
-          style={styles.description}
-          placeholder="Add Description"
-          value={description}
-          onChangeText={(text) => setDescription(text)}
-        />
-        <Pressable
-          style={styles.postButton}
-          onPress={() => onCreate(description)}
-        >
-          <Text style={styles.postButtonText}>&gt;</Text>
-        </Pressable>
-      </View>
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          {image && <Image source={{ uri: image }} style={styles.image} />}
+          <Pressable style={styles.closeButton} onPress={onClose}>
+            <Icon name="x" color="#fff" size={24} />
+          </Pressable>
+          <View style={styles.actions}>
+            <TextInput
+              style={styles.description}
+              placeholder="Add Description"
+              value={description}
+              onChangeText={(text) => setDescription(text)}
+            />
+            <Pressable
+              style={styles.postButton}
+              onPress={() => onCreate(description)}
+            >
+              <Icon name="chevron-right" color="#fff" size={18} />
+            </Pressable>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    backdropFilter: 'blur(5px)',
     width: '100%',
     height: '100%',
   },
@@ -61,7 +66,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    top: 10,
+    top: 48,
     right: 10,
   },
   description: {
@@ -76,15 +81,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     position: 'absolute',
-    bottom: 50,
+    bottom: 24,
     justifyContent: 'center',
   },
   postButton: {
     position: 'absolute',
     right: 10,
-    width: 32,
-    height: 32,
-    backgroundColor: 'green',
+    padding: 8,
+    backgroundColor: 'purple',
     borderRadius: '50%',
     justifyContent: 'center',
     alignItems: 'center',

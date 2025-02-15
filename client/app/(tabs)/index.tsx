@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Text, FlatList, Pressable } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  Pressable,
+  Modal,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import Icon from '@expo/vector-icons/Feather';
@@ -90,20 +97,22 @@ export default function HomeScreen() {
       )}
 
       {image && (
-        <CreatePostModal
-          image={image}
-          onCreate={async (description) => {
-            const post = await PostService.create(
-              tokenRef.current as string,
-              image,
-              imageNameRef.current,
-              description,
-            );
-            setPosts([post, ...posts]);
-            setImage(null);
-          }}
-          onClose={() => setImage(null)}
-        />
+        <Modal transparent visible>
+          <CreatePostModal
+            image={image}
+            onCreate={async (description) => {
+              const post = await PostService.create(
+                tokenRef.current as string,
+                image,
+                imageNameRef.current,
+                description,
+              );
+              setPosts([post, ...posts]);
+              setImage(null);
+            }}
+            onClose={() => setImage(null)}
+          />
+        </Modal>
       )}
     </View>
   );
@@ -112,6 +121,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+    paddingTop: 48,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -122,6 +132,7 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: 'row',
+    width: '100%',
     gap: 8,
     position: 'fixed',
     top: 20,
