@@ -11,9 +11,9 @@ const router = Router();
 
 // Create a new Post
 router.post('/', async (req, res) => {
-  const { content, description } = req.body;
+  const { content, fileName, description } = req.body;
 
-  if (!content) {
+  if (!content || !fileName) {
     res.status(401).json({ message: 'content are required' });
     return;
   }
@@ -28,13 +28,13 @@ router.post('/', async (req, res) => {
 
   const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
 
+  const ext = (fileName + '').split('.').at(-1);
+
   try {
     // Save file locally (for now...)
-    const path = join('uploads', uuid());
-    await writeFile(
-      resolve(path),
-      Buffer.from(content, 'base64').toString('utf-8'),
-    );
+    const path = join('uploads', `${uuid()}.${ext}`);
+    const cleanedContent = `${content}`.replace(/data:.*,/, '').slice(0, 100);
+    await writeFile(resolve(path), Buffer.from(cleanedContent, 'base64'));
 
     const post = await postRepository.create({
       path,

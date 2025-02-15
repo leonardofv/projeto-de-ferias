@@ -7,6 +7,7 @@ import postRoutes from './routes/post.routes';
 const app = express();
 app.use(express.json({ limit: '5mb' }));
 app.use(cors());
+app.use('/uploads', express.static('uploads'));
 
 const PORT = process.env.PORT ?? 3000;
 

@@ -1,14 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, Text, Button, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
 
 import Post from '@/components/Post';
+import CreatePostModal from '@/components/CreatePostModal';
 import { Post as IPost, PostService } from '@/services/post.service';
 import { clearToken, getToken } from '@/utils';
 
 export default function HomeScreen() {
   const [posts, setPosts] = useState<IPost[]>([]);
   const [isLoadingPosts, setIsLoadingPosts] = useState(true);
+  const [image, setImage] = useState<string | null>(null);
+  const imageName = useRef('');
+
+  const tokenRef = useRef('');
+
   const navigation = useNavigation<any>(); // eslint-disable-line
 
   const counterRef = useRef<NodeJS.Timeout>();
@@ -17,6 +24,7 @@ export default function HomeScreen() {
     getToken()
       .then((token) => {
         if (!token) return Promise.resolve([]);
+        tokenRef.current = token;
         return PostService.fetchPosts(token);
       })
       .then((data) => setPosts(data))
@@ -47,13 +55,47 @@ export default function HomeScreen() {
           )}
         />
       )}
-      <Button
-        title="Logout"
-        onPress={() => {
-          clearToken();
-          navigation.replace('login');
-        }}
-      />
+      <View style={styles.actions}>
+        <Button
+          title="Create"
+          onPress={async () => {
+            const result = await ImagePicker.launchImageLibraryAsync({
+              mediaTypes: ['images', 'videos'],
+              aspect: [9, 16],
+              quality: 1,
+            });
+            if (result.canceled) return;
+
+            const [asset] = result.assets;
+            setImage(asset.uri);
+            imageName.current = asset.fileName ?? '';
+          }}
+        />
+        <Button
+          title="Logout"
+          onPress={() => {
+            clearToken();
+            navigation.replace('login');
+          }}
+        />
+      </View>
+
+      {image && (
+        <CreatePostModal
+          image={image}
+          onCreate={async (description) => {
+            const post = await PostService.create(
+              tokenRef.current as string,
+              image,
+              imageName.current,
+              description,
+            );
+            setPosts([post, ...posts]);
+            setImage(null);
+          }}
+          onClose={() => setImage(null)}
+        />
+      )}
     </View>
   );
 }
@@ -68,5 +110,9 @@ const styles = StyleSheet.create({
   },
   noFoundPostsTitle: {
     color: 'white',
+  },
+  actions: {
+    flexDirection: 'row',
+    gap: 8,
   },
 });

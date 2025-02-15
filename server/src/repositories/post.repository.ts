@@ -46,5 +46,6 @@ export const getByUserId = async (userId: User['id']): Promise<Post[]> => {
     })
     .select()
     .from('post')
-    .where({ user_id: userId });
+    .where({ user_id: userId })
+    .orderBy('publish_date', 'desc');
 };

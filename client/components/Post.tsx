@@ -1,4 +1,6 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
+
+const UPLOADS_URL = process.env.EXPO_PUBLIC_UPLOADS_URL;
 
 type UserProps = {
   id: number;
@@ -10,7 +12,6 @@ type UserProps = {
 
 export default function Post({
   id,
-  userId,
   path,
   publishDate,
   description,
@@ -18,8 +19,10 @@ export default function Post({
   return (
     <View style={styles.container}>
       <Text style={styles.title}>ID: {id}</Text>
-      <Text>User ID: {userId}</Text>
-      <Text>Path: {path}</Text>
+      <Image
+        source={{ uri: `${UPLOADS_URL}/${path.replace('\\', '/')}` }}
+        style={styles.image}
+      />
       <Text>Publish Date: {publishDate}</Text>
       <Text>Description: {description}</Text>
     </View>
@@ -32,8 +35,13 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 5,
     borderRadius: 5,
+    width: 400,
   },
   title: {
     fontWeight: 'bold',
+  },
+  image: {
+    width: 200,
+    height: 200,
   },
 });
