@@ -3,11 +3,11 @@ import {
   View,
   Image,
   StyleSheet,
-  Button,
   TextInput,
   Pressable,
   Text,
 } from 'react-native';
+import Icon from '@expo/vector-icons/Feather';
 
 type CreatePostModalProps = {
   image: string;
@@ -25,9 +25,9 @@ export default function CreatePostModal({
   return (
     <View style={styles.container}>
       {image && <Image source={{ uri: image }} style={styles.image} />}
-      <View style={styles.closeButton}>
-        <Button title="Close" onPress={onClose} />
-      </View>
+      <Pressable style={styles.closeButton} onPress={onClose}>
+        <Icon name="x" color="#fff" size={24} />
+      </Pressable>
       <View style={styles.actions}>
         <TextInput
           style={styles.description}

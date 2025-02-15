@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Text, Button, FlatList } from 'react-native';
+import { StyleSheet, View, Text, FlatList, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
+import Icon from '@expo/vector-icons/Feather';
 
 import Post from '@/components/Post';
 import CreatePostModal from '@/components/CreatePostModal';
@@ -12,13 +13,30 @@ export default function HomeScreen() {
   const [posts, setPosts] = useState<IPost[]>([]);
   const [isLoadingPosts, setIsLoadingPosts] = useState(true);
   const [image, setImage] = useState<string | null>(null);
-  const imageName = useRef('');
 
+  const imageNameRef = useRef('');
   const tokenRef = useRef('');
+  const counterRef = useRef<NodeJS.Timeout>();
 
   const navigation = useNavigation<any>(); // eslint-disable-line
 
-  const counterRef = useRef<NodeJS.Timeout>();
+  const createPost = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images', 'videos'],
+      aspect: [9, 16],
+      quality: 1,
+    });
+    if (result.canceled) return;
+
+    const [asset] = result.assets;
+    setImage(asset.uri);
+    imageNameRef.current = asset.fileName ?? '';
+  };
+
+  const logout = () => {
+    clearToken();
+    navigation.replace('login');
+  };
 
   useEffect(() => {
     getToken()
@@ -35,6 +53,15 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.myPostsText}>My Posts</Text>
+      <View style={styles.actions}>
+        <Pressable style={styles.actionButton} onPress={createPost}>
+          <Icon name="plus" color="#fff" size={24} />
+        </Pressable>
+        <Pressable style={styles.actionButton} onPress={logout}>
+          <Icon name="log-out" color="#fff" size={24} />
+        </Pressable>
+      </View>
       {isLoadingPosts ? (
         <Text style={styles.noFoundPostsTitle}>Loading...</Text>
       ) : (
@@ -61,30 +88,6 @@ export default function HomeScreen() {
           )}
         />
       )}
-      <View style={styles.actions}>
-        <Button
-          title="Create"
-          onPress={async () => {
-            const result = await ImagePicker.launchImageLibraryAsync({
-              mediaTypes: ['images', 'videos'],
-              aspect: [9, 16],
-              quality: 1,
-            });
-            if (result.canceled) return;
-
-            const [asset] = result.assets;
-            setImage(asset.uri);
-            imageName.current = asset.fileName ?? '';
-          }}
-        />
-        <Button
-          title="Logout"
-          onPress={() => {
-            clearToken();
-            navigation.replace('login');
-          }}
-        />
-      </View>
 
       {image && (
         <CreatePostModal
@@ -93,7 +96,7 @@ export default function HomeScreen() {
             const post = await PostService.create(
               tokenRef.current as string,
               image,
-              imageName.current,
+              imageNameRef.current,
               description,
             );
             setPosts([post, ...posts]);
@@ -120,5 +123,17 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: 'row',
     gap: 8,
+    position: 'fixed',
+    top: 20,
+    right: 16,
+  },
+  myPostsText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 32,
+    marginBottom: 8,
+  },
+  actionButton: {
+    padding: 6,
   },
 });
