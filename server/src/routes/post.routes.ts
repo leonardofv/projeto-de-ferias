@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
   try {
     // Save file locally (for now...)
     const path = join('uploads', `${uuid()}.${ext}`);
-    const cleanedContent = `${content}`.replace(/data:.*,/, '').slice(0, 100);
+    const cleanedContent = `${content}`.replace(/data:.*,/, '');
     await writeFile(resolve(path), Buffer.from(cleanedContent, 'base64'));
 
     const post = await postRepository.create({
