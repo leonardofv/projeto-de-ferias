@@ -1,9 +1,10 @@
+import { useEffect, useRef, useState } from 'react';
+import { StyleSheet, View, Text, Button, FlatList } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
 import Post from '@/components/Post';
 import { Post as IPost, PostService } from '@/services/post.service';
 import { clearToken, getToken } from '@/utils';
-import { useNavigation } from '@react-navigation/native';
-import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Text, Button, FlatList } from 'react-native';
 
 export default function HomeScreen() {
   const [posts, setPosts] = useState<IPost[]>([]);
@@ -64,15 +65,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-  },
-  post: {
-    backgroundColor: 'white',
-    padding: 10,
-    marginVertical: 5,
-    borderRadius: 5,
-  },
-  postTitle: {
-    fontWeight: 'bold',
   },
   noFoundPostsTitle: {
     color: 'white',

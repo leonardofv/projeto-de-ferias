@@ -16,8 +16,8 @@ export default function Post({
   description,
 }: UserProps) {
   return (
-    <View style={styles.post}>
-      <Text style={styles.postTitle}>ID: {id}</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>ID: {id}</Text>
       <Text>User ID: {userId}</Text>
       <Text>Path: {path}</Text>
       <Text>Publish Date: {publishDate}</Text>
@@ -28,22 +28,12 @@ export default function Post({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-  },
-  post: {
     backgroundColor: 'white',
     padding: 10,
     marginVertical: 5,
     borderRadius: 5,
   },
-  postTitle: {
+  title: {
     fontWeight: 'bold',
-  },
-  noFoundPostsTitle: {
-    color: 'white',
   },
 });
